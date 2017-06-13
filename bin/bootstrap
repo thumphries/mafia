@@ -24,12 +24,13 @@ if [ "$GIT_WORKERS" = "1" ]; then
 else
     git submodule \
         | awk '{ print $2 }' \
-        | xargs -L 1 -P $GIT_WORKERS git submodule update 2>/dev/null
+        | tr '\n' '\0' \
+        | xargs -n1 -P $GIT_WORKERS git submodule update 2>/dev/null
 fi
 
 cabal sandbox init
 
-CABAL_SOURCES=$(find lib -maxdepth 4 ! -path lib/\*/bin/\* ! -path lib/\*/lib/\* -name \*.cabal | xargs -L 1 dirname)
+CABAL_SOURCES=$(find lib -maxdepth 4 ! -path lib/\*/bin/\* ! -path lib/\*/lib/\* -name \*.cabal | tr '\n' '\0' | xargs -n1 dirname)
 for CABAL_SOURCE in $CABAL_SOURCES; do
     cabal sandbox add-source -- $CABAL_SOURCE
 done
