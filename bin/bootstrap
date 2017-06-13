@@ -18,16 +18,7 @@ fi
 #
 
 git submodule init
-
-if [ "$GIT_WORKERS" = "1" ]; then
-    git submodule update
-else
-    git submodule \
-        | awk '{ print $2 }' \
-        | tr '\n' '\0' \
-        | xargs -0 -n1 -P $GIT_WORKERS git submodule update 2>/dev/null
-fi
-
+git submodule update
 cabal sandbox init
 
 CABAL_SOURCES=$(find lib -maxdepth 4 ! -path lib/\*/bin/\* ! -path lib/\*/lib/\* -name \*.cabal | tr '\n' '\0' | xargs -0 -n1 dirname)
