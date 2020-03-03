@@ -196,7 +196,7 @@ tryPosixPidOfProcessHandle ph =
    \case
     ProcessInternals.OpenHandle i   -> return $ Just i
     ProcessInternals.ClosedHandle _ -> return $ Nothing
-    ProcessInternals.OpenExtHandle i _ _ -> return $ Just i
+    ProcessInternals.OpenExtHandle i _ -> return $ Just i
 
 tryProcessGroupOfProcessHandle :: (MonadIO m, MonadCatch m) => Process.ProcessHandle -> m (Maybe Posix.ProcessGroupID)
 tryProcessGroupOfProcessHandle ph = do
